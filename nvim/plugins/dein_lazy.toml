@@ -1,0 +1,25 @@
+[[plugins]]
+repo = 'jiangmiao/auto-pairs'
+on_i = 1
+
+[[plugins]]
+repo = 'Shougo/defx.nvim'
+hook_add = '''
+    nnoremap <silent> <C-e>
+    \ :<C-u>Defx <CR>
+'''
+hook_source = '''
+    call defx#custom#option('_', {
+    \ 'winwidth': 40,
+    \ 'show_ignored_files': 1,
+    \ 'toggle': 1,
+    \})
+'''
+[plugins.ftplugin]
+defx = '''
+    nnoremap <silent><buffer><expr> <CR>
+    \ defx#async_action('open')
+'''
+
+[[plugins]]
+repo = 'Shougo/context_filetype.vim'
