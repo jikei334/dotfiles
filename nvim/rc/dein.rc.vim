@@ -8,8 +8,7 @@ if !dein#load_state(s:path)
     finish
 endif
 
-let s:dein_toml_dir = g:nvim_config_root . "/rc/"
-" let s:dein_toml_dir = g:nvim_config_root . "/plugins/"
+let s:dein_toml_dir = g:nvim_config_root . "/plugins/"
 let s:dein_toml = s:dein_toml_dir . "dein.toml"
 let s:dein_lazy_toml = s:dein_toml_dir . "dein_lazy.toml"
 let s:dein_ft_toml = s:dein_toml_dir . "dein_ft.toml"
