@@ -1,0 +1,7 @@
+hook_add = '''
+autocmd MyAutoCmd BufWritePost * nested
+\ if &l:filetype ==# '' || exists('b:ftdetect')
+\ |     unlet! b:ftdetect
+\ |     filetype detect
+\ | endif
+'''

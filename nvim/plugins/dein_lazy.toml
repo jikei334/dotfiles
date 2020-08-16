@@ -4,12 +4,15 @@ on_i = 1
 
 [[plugins]]
 repo = 'Shougo/defx.nvim'
+on_cmd = "Defx"
+depends = ['defx-icons']
 hook_add = '''
     nnoremap <silent> <C-e>
-    \ :<C-u>Defx <CR>
+    \ :<C-u>Defx -listed -resume -buffer-name=tab`tabpagenr()`<CR>
 '''
 hook_source = '''
     call defx#custom#option('_', {
+    \ 'columns': 'icons:indent:filename:type',
     \ 'winwidth': 40,
     \ 'show_ignored_files': 1,
     \ 'toggle': 1,
@@ -17,8 +20,14 @@ hook_source = '''
 '''
 [plugins.ftplugin]
 defx = '''
-    nnoremap <silent><buffer><expr> <CR>
-    \ defx#async_action('open')
+nnoremap <silent><buffer><expr> <CR>
+\ defx#async_action('open')
+'''
+
+[[plugins]]
+repo = "kristijanhusak/defx-icons"
+hook_add = '''
+let g:defx_icons_column_length = 2
 '''
 
 [[plugins]]

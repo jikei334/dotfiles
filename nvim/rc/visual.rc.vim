@@ -1,5 +1,4 @@
-filetype plugin indent on
-syntax on
+" filetype plugin indent on
 set number
 set ruler
 set cursorline
