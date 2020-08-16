@@ -1,4 +1,8 @@
 [[plugins]]
+repo = 'haya14busa/dein-command.vim'
+on_cmd = 'Dein'
+
+[[plugins]]
 repo = 'jiangmiao/auto-pairs'
 on_i = 1
 
@@ -32,3 +36,15 @@ let g:defx_icons_column_length = 2
 
 [[plugins]]
 repo = 'Shougo/context_filetype.vim'
+
+[[plugins]]
+repo = 'Shougo/deoplete.nvim'
+depends = 'context_filetype.vim'
+on_i = 1
+hook_source = '''
+call deoplete#enable()
+'''
+
+[[plugins]]
+repo = 'lighttiger2505/deoplete-vim-lsp'
+depends = 'deoplete.nvim'

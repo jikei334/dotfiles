@@ -13,10 +13,9 @@ let s:dein_toml = s:dein_toml_dir . "dein.toml"
 let s:dein_lazy_toml = s:dein_toml_dir . "dein_lazy.toml"
 let s:dein_ft_toml = s:dein_toml_dir . "dein_ft.toml"
 
-" call dein#begin(s:path, [
-"     \ expand('<sfile>'), s:dein_toml, s:dein_lazy_toml, s:dein_ft_toml
-"     \ ])
-call dein#begin(s:path, expand('<sfile>'))
+call dein#begin(s:path, [
+    \ expand('<sfile>'), s:dein_toml, s:dein_lazy_toml, s:dein_ft_toml
+    \ ])
 
 call dein#load_toml(s:dein_toml, {'lazy': 0})
 call dein#load_toml(s:dein_lazy_toml, {'lazy': 1})
