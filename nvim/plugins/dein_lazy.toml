@@ -8,15 +8,26 @@ on_i = 1
 
 [[plugins]]
 repo = 'Shougo/defx.nvim'
+depends = "defx-icons"
 on_cmd = "Defx"
-depends = ['defx-icons']
 hook_add = '''
     nnoremap <silent> <C-e>
     \ :<C-u>Defx -listed -resume -buffer-name=tab`tabpagenr()`<CR>
 '''
 hook_source = '''
+    call defx#custom#column('icon', {
+        \ 'directory_icon': '▸',
+        \ 'opened_icon': '▾',
+        \ 'root_icon': ' ',
+    \ })
+    call defx#custom#column('mark', {
+        \ 'readonly_icon': '✗',
+        \ 'selected_icon': '✓',
+    \ })
     call defx#custom#option('_', {
     \ 'columns': 'icons:indent:filename:type',
+    \ 'split': 'vertical',
+    \ 'direction': 'topleft',
     \ 'winwidth': 40,
     \ 'show_ignored_files': 1,
     \ 'toggle': 1,
@@ -25,13 +36,48 @@ hook_source = '''
 [plugins.ftplugin]
 defx = '''
 nnoremap <silent><buffer><expr> <CR>
-\ defx#async_action('open')
+\ defx#is_directory() ?
+\ defx#do_action('open_tree', "toggle") :
+\ defx#async_action('drop')
+nnoremap <silent><buffer><expr> t
+\ defx#async_action('open', 'tabnew')
+nnoremap <silent><buffer><expr> i
+\ defx#async_action('open', 'split')
+nnoremap <silent><buffer><expr> h
+\ defx#async_action('cd', ['..'])
+nnoremap <silent><buffer><expr> N
+\ defx#do_action('new_directory')
+nnoremap <silent><buffer><expr> n
+\ defx#do_action('new_file')
+nnoremap <silent><buffer><expr> m
+\ defx#do_action('move')
+nnoremap <silent><buffer><expr> d
+\ defx#do_action('remove')
+nnoremap <silent><buffer><expr> r
+\ defx#do_action('rename')
+nnoremap <silent><buffer><expr> l
+\ defx#do_action('toggle_columns', 'mark:filename:type:time')
+'''
+
+[[plugins]]
+repo = "ryanoasis/vim-devicons"
+hook_add = '''
+    let g:webdevicons_enable_nerdtree = 1
+    let g:webdevicons_enable_denite = 1
 '''
 
 [[plugins]]
 repo = "kristijanhusak/defx-icons"
 hook_add = '''
-let g:defx_icons_column_length = 2
+    let g:defx_icons_enable_syntax_highlight = 0
+    let g:defx_icons_column_length = 2
+    let g:defx_icons_directory_icon = ''
+    let g:defx_icons_mark_icon = '*'
+    let g:defx_icons_copy_icon = ''
+    let g:defx_icons_move_icon = ''
+    let g:defx_icons_parent_icon = ''
+    let g:defx_icons_default_icon = ''
+    let g:defx_icons_directory_symlink_icon = ''
 '''
 
 [[plugins]]
