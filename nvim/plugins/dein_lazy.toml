@@ -39,6 +39,8 @@ nnoremap <silent><buffer><expr> <CR>
 \ defx#is_directory() ?
 \ defx#do_action('open_tree', "toggle") :
 \ defx#async_action('drop')
+nnoremap <silent><buffer><expr> o
+\ defx#async_action('open')
 nnoremap <silent><buffer><expr> t
 \ defx#async_action('open', 'tabnew')
 nnoremap <silent><buffer><expr> i
@@ -57,6 +59,8 @@ nnoremap <silent><buffer><expr> r
 \ defx#do_action('rename')
 nnoremap <silent><buffer><expr> l
 \ defx#do_action('toggle_columns', 'mark:filename:type:time')
+nnoremap <silent><buffer><expr> *
+\ defx#async_action('toggle_ignored_files')
 '''
 
 [[plugins]]
