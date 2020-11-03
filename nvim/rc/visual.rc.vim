@@ -3,6 +3,7 @@ set number
 set ruler
 set cursorline
 set list
+set autoindent
 set smartindent
 
 set tabstop=4
