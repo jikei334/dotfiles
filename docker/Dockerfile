@@ -1,39 +1,64 @@
 FROM ubuntu:16.04
 
-RUN apt-get update && apt-get -y upgrade && \
-	apt-get install -y \
-		automake \
-		build-essential \
-		git \
-		curl \
-		zsh \
-		sed \
-		zlib1g-dev \
-		libssl-dev \
-		software-properties-common
+ENV DEBIAN_FRONTEND noninteractive
 
-RUN add-apt-repository ppa:neovim-ppa/stable &&\
-	apt-get update && \
-	apt-get install -y \
-		neovim \
-		python3-dev \
-		python3-pip
+RUN apt-get update && apt-get -y upgrade && \
+    apt-get install -y \
+        automake \
+        build-essential \
+        git \
+        curl \
+        locales \
+        zsh \
+        sed \
+        zlib1g-dev \
+        libssl-dev \
+        sudo \
+        wget \
+        software-properties-common && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists*
+
+RUN add-apt-repository ppa:neovim-ppa/unstable &&\
+    apt-get update && \
+    apt-get install -y \
+        neovim \
+        python-dev \
+        python-pip \
+        python3-dev \
+        python3-pip
+
+SHELL ["/usr/bin/zsh", "-c"]
 
 ENV SHELL /usr/bin/zsh
-ENV HOME /root
+ENV LOGIN_USER jikei334
+ENV PASSWORD password
+ENV HOME /home/$LOGIN_USER
 ENV PYENV_ROOT $HOME/.pyenv
+ENV PYTHON3_VERSION=3.6.1 \
+    PYTHON2_VERSION=2.7.11
 ENV PATH $PYENV_ROOT/bin:$PATH
-ENV PYTHON_VERSION 3.6.1
+
+RUN echo "ja_JP UTF-8" > /etc/locale.gen && \
+    locale-gen
 
 RUN sed -i.bak "s|$HOME:|$HOME:$SHELL|" /etc/passwd
 
-WORKDIR /root
+RUN useradd -m --groups sudo -d $HOME ${LOGIN_USER} && \
+    echo $LOGIN_USER:$PASSWORD | chpasswd && \
+    echo "HOME: $HOME(User: $LOGIN_USER)"
+USER $LOGIN_USER
+WORKDIR $HOME
 
-RUN git clone https://github.com/pyenv/pyenv.git ~/.pyenv && \
-	eval "$(pyenv init -)" && \
-	pyenv install $PYTHON_VERSION && \
-	pyenv global $PYTHON_VERSION && \
-	pip install neovim
+RUN git clone https://github.com/pyenv/pyenv.git $HOME/.pyenv && \
+    eval "$(pyenv init - zsh)" && \
+    pyenv install $PYTHON3_VERSION && \
+    pyenv install $PYTHON2_VERSION && \
+    pyenv global $PYTHON3_VERSION $PYTHON2_VERSION && \
+    pip2 install neovim && \
+    pip3 install neovim
+
+RUN echo "export ZDOTDIR=/dotfiles/zsh" > $HOME/.zshenv
 
 COPY entrypoint.sh /tmp
 
