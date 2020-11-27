@@ -44,6 +44,12 @@ RUN echo "ja_JP UTF-8" > /etc/locale.gen && \
 
 RUN sed -i.bak "s|$HOME:|$HOME:$SHELL|" /etc/passwd
 
+ENV CLANGD_FILENAME clang+llvm-11.0.0-x86_64-linux-gnu-ubuntu-16.04
+RUN curl -L https://github.com/llvm/llvm-project/releases/download/llvmorg-11.0.0/$CLANGD_FILENAME.tar.xz | \
+    unxz | \
+    tar x --strip-components=1 $CLANGD_FILENAME/ && \
+    ln -sf bin/clangd /usr/bin/clangd
+
 RUN useradd -m --groups sudo -d $HOME ${LOGIN_USER} && \
     echo $LOGIN_USER:$PASSWORD | chpasswd && \
     echo "HOME: $HOME(User: $LOGIN_USER)"
@@ -56,7 +62,9 @@ RUN git clone https://github.com/pyenv/pyenv.git $HOME/.pyenv && \
     pyenv install $PYTHON2_VERSION && \
     pyenv global $PYTHON3_VERSION $PYTHON2_VERSION && \
     pip2 install neovim && \
-    pip3 install neovim
+    pip3 install \
+        neovim \
+        'python-language-server[all]'
 
 RUN echo "export ZDOTDIR=/dotfiles/zsh" > $HOME/.zshenv
 

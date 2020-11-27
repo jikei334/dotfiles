@@ -1,9 +1,13 @@
 version: "2.3"
 services:
     ubuntu16:
-        build: ./docker
+        build:
+            context: ./docker
+            network: host
         container_name: ubuntu16
         tty: true
         volumes:
             - ./zsh:/dotfiles/zsh
             - ./nvim:/dotfiles/nvim
+        dns:
+            - 8.8.8.8

@@ -4,34 +4,34 @@ on_cmd = 'Dein'
 
 [[plugins]]
 repo = 'jiangmiao/auto-pairs'
-on_i = 1
+on_event = 'InsertEnter'
 
 [[plugins]]
 repo = 'Shougo/defx.nvim'
 depends = "defx-icons"
 on_cmd = "Defx"
 hook_add = '''
-    nnoremap <silent> <C-e>
-    \ :<C-u>Defx -listed -resume -buffer-name=tab`tabpagenr()`<CR>
+nnoremap <silent> <C-e>
+\ :<C-u>Defx -listed -resume -buffer-name=tab`tabpagenr()`<CR>
 '''
 hook_source = '''
-    call defx#custom#column('icon', {
-        \ 'directory_icon': '▸',
-        \ 'opened_icon': '▾',
-        \ 'root_icon': ' ',
-    \ })
-    call defx#custom#column('mark', {
-        \ 'readonly_icon': '✗',
-        \ 'selected_icon': '✓',
-    \ })
-    call defx#custom#option('_', {
-    \ 'columns': 'icons:indent:filename:type',
-    \ 'split': 'vertical',
-    \ 'direction': 'topleft',
-    \ 'winwidth': 40,
-    \ 'show_ignored_files': 1,
-    \ 'toggle': 1,
-    \})
+call defx#custom#column('icon', {
+    \ 'directory_icon': '▸',
+    \ 'opened_icon': '▾',
+    \ 'root_icon': ' ',
+\ })
+call defx#custom#column('mark', {
+    \ 'readonly_icon': '✗',
+    \ 'selected_icon': '✓',
+\ })
+call defx#custom#option('_', {
+\ 'columns': 'icons:indent:filename:type',
+\ 'split': 'vertical',
+\ 'direction': 'topleft',
+\ 'winwidth': 40,
+\ 'show_ignored_files': 1,
+\ 'toggle': 1,
+\})
 '''
 [plugins.ftplugin]
 defx = '''
@@ -44,7 +44,7 @@ nnoremap <silent><buffer><expr> o
 nnoremap <silent><buffer><expr> t
 \ defx#async_action('open', 'tabnew')
 nnoremap <silent><buffer><expr> i
-\ defx#async_action('open', 'split')
+\ defx#do_action('open', 'split')
 nnoremap <silent><buffer><expr> h
 \ defx#async_action('cd', ['..'])
 nnoremap <silent><buffer><expr> N
@@ -66,22 +66,22 @@ nnoremap <silent><buffer><expr> *
 [[plugins]]
 repo = "ryanoasis/vim-devicons"
 hook_add = '''
-    let g:webdevicons_enable_nerdtree = 1
-    let g:webdevicons_enable_denite = 1
+let g:webdevicons_enable_nerdtree = 1
+let g:webdevicons_enable_denite = 1
 '''
 
 [[plugins]]
 repo = "kristijanhusak/defx-icons"
 hook_add = '''
-    let g:defx_icons_enable_syntax_highlight = 0
-    let g:defx_icons_column_length = 2
-    let g:defx_icons_directory_icon = ''
-    let g:defx_icons_mark_icon = '*'
-    let g:defx_icons_copy_icon = ''
-    let g:defx_icons_move_icon = ''
-    let g:defx_icons_parent_icon = ''
-    let g:defx_icons_default_icon = ''
-    let g:defx_icons_directory_symlink_icon = ''
+let g:defx_icons_enable_syntax_highlight = 0
+let g:defx_icons_column_length = 2
+let g:defx_icons_directory_icon = ''
+let g:defx_icons_mark_icon = '*'
+let g:defx_icons_copy_icon = ''
+let g:defx_icons_move_icon = ''
+let g:defx_icons_parent_icon = ''
+let g:defx_icons_default_icon = ''
+let g:defx_icons_directory_symlink_icon = ''
 '''
 
 [[plugins]]
@@ -90,11 +90,16 @@ repo = 'Shougo/context_filetype.vim'
 [[plugins]]
 repo = 'Shougo/deoplete.nvim'
 depends = 'context_filetype.vim'
-on_i = 1
-hook_source = '''
-call deoplete#enable()
+on_event = 'InsertEnter'
+hook_add = '''
+let g:deoplete#enable_at_startup = 1
 '''
 
-[[plugins]]
-repo = 'lighttiger2505/deoplete-vim-lsp'
-depends = 'deoplete.nvim'
+hook_source = '''
+call deoplete#custom#option({
+\   'auto_complete_delay': 200,
+\   'auto_complete_start_length': 0,
+\   'smart_case': v:true,
+\   'max_list': 20,
+\})
+'''
