@@ -75,13 +75,13 @@ repo = "kristijanhusak/defx-icons"
 hook_add = '''
 let g:defx_icons_enable_syntax_highlight = 0
 let g:defx_icons_column_length = 2
-let g:defx_icons_directory_icon = ''
+let g:defx_icons_directory_icon = '📁'
 let g:defx_icons_mark_icon = '*'
 let g:defx_icons_copy_icon = ''
 let g:defx_icons_move_icon = ''
-let g:defx_icons_parent_icon = ''
-let g:defx_icons_default_icon = ''
-let g:defx_icons_directory_symlink_icon = ''
+let g:defx_icons_parent_icon = '📂'
+let g:defx_icons_default_icon = '📁'
+let g:defx_icons_directory_symlink_icon = '📁'
 '''
 
 [[plugins]]
@@ -102,4 +102,34 @@ call deoplete#custom#option({
 \   'smart_case': v:true,
 \   'max_list': 20,
 \})
+'''
+
+[[plugins]]
+repo = 'Shougo/denite.nvim'
+on_cmd = 'Denite'
+hook_add = '''
+nmap <silent> <leader>f :<C-u>Denite -start-filter file/rec<CR>
+nmap <silent> <leader>F :<C-u>DeniteProjectDir -start-filter file/rec<CR>
+nmap <silent> <leader>g :<C-u>DeniteProjectDir grep:::<C-r><C-w><CR>
+nmap <silent> <leader>G :<C-u>DeniteProjectDir grep:::<C-r><C-a><CR>
+nmap <silent> <leader><leader>g :<C-u>Denite grep<CR>
+nmap <silent> <leader><leader>G :<C-u>DeniteProjectDir grep<CR>
+'''
+hook_source = '''
+call denite#custom#option('default', {
+\   'auto_action': 'preview',
+\   'floating_preview': v:true,
+\   'prompt': '%',
+\   'split': 'floating',
+\ })
+'''
+
+[plugins.ftplugin]
+denite = '''
+nnoremap <silent><buffer><expr> <CR>
+\ denite#do_map('do_action', 'split')
+nnoremap <silent><buffer><expr> q
+\ denite#do_map('quit')
+nnoremap <silent><buffer><expr> i
+\ denite#do_map('open_filter_buffer')
 '''
