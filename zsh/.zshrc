@@ -1,6 +1,7 @@
 DOTFILES_DIR=$(dirname $ZDOTDIR)
 
 export XDG_CONFIG_HOME=${DOTFILES_DIR}
+export PATH="$HOME/.local/bin:$PATH"
 
 # X11 Display
 export DISPLAY=localhost:0.0
