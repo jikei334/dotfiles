@@ -1,0 +1,130 @@
+[[plugins]]
+repo = 'Shougo/ddc.vim'
+depends = 'denops.vim'
+on_event = ['InsertEnter']
+
+hook_add = '''
+inoremap <C-n> <Cmd>call pum#map#insert_relative(+1)<CR>
+inoremap <C-p> <Cmd>call pum#map#insert_relative(-1)<CR>
+'''
+hook_source = '''
+call ddc#custom#patch_global('ui', 'pum')
+call ddc#custom#patch_global('sources', [
+\   'nvim-lsp',
+\   'deoppet',
+\   'around',
+\])
+call ddc#custom#patch_global('sourceOptions', #{
+\   _: #{
+\       matchers: ['matcher_head'],
+\       sorters: ['sorter_rank'],
+\   },
+\   nvim-lsp: #{
+\       mark: 'lsp',
+\       forceCompletionPattern: '\.\w*|:\w*|->\w*',
+\   },
+\   deoppet: #{
+\       mark: 'dp',
+\       dup: v:true,
+\   },
+\   around: #{
+\       mark: 'A',
+\   },
+\})
+call ddc#custom#patch_global('sourceParams', #{
+\   around: #{
+\       maxSize: 50,
+\   },
+\   nvim-lsp: #{
+\       snippetEngine: denops#callback#register({
+\           body -> vsnip#anonymous(body)
+\       }),
+\       enableResolveItem: v:true,
+\       enableAdditionalTextEdit: v:true,
+\   },
+\})
+
+call ddc#enable()
+'''
+
+[[plugins]]
+repo = 'Shougo/ddc-source-around'
+on_source = 'ddc.vim'
+
+[[plugins]]
+repo = 'Shougo/ddc-ui-pum'
+depends = 'pum.vim'
+on_source = 'ddc.vim'
+
+[[plugins]]
+repo = 'Shougo/ddc-matcher_head'
+on_source = 'ddc.vim'
+
+[[plugins]]
+repo = 'Shougo/ddc-sorter_rank'
+on_source = 'ddc.vim'
+
+[[plugins]]
+repo = 'Shougo/ddc-source-nvim-lsp'
+on_source = 'ddc.vim'
+
+[[plugins]]
+repo = 'Shougo/deoppet.nvim'
+on_source = 'ddc.vim'
+hook_add = '''
+inoremap <silent> <C-k> <Plug>(deoppet_expand)
+'''
+hook_source = '''
+call deoppet#initialize()
+call deoppet#custom#option('snippets', [{
+\   'path': '/home/jikei/dotfiles/nvim/autoload/snippets',
+\}])
+'''
+
+[[plugins]]
+repo = 'neovim/nvim-lspconfig'
+depends = ['ddc.vim', 'ddc-source-nvim-lsp']
+on_event = ['InsertEnter']
+hook_add = '''
+set omnifunc=lsp#omnifunc
+
+nnoremap <silent> <leader>d <cmd>lua vim.lsp.buf.definition()<CR>
+nnoremap <silent> <leader>e <cmd>lua vim.lsp.buf.declaration()<CR>
+nnoremap <silent> <leader>h <cmd>lua vim.lsp.buf.hover()<CR>
+'''
+hook_source = '''
+lua << EOF
+local nvim_lsp = require('lspconfig')
+local capabilities = require('ddc_nvim_lsp').make_client_capabilities()
+nvim_lsp.pylsp.setup{
+    capabilities = capabilities,
+    settings = {
+        pylsp = {
+            plugins = {
+                pycodestyle = {
+                    enabled = false
+                },
+                pylint = {
+                    enabled = false
+                }
+            }
+        },
+    },
+}
+
+nvim_lsp.clangd.setup{}
+
+local opts = {
+    capabilities = capabilities,
+    tools = {
+        inlay_hints = {
+            auto = true,
+        },
+    },
+    server = {
+        standalone = true,
+    },
+}
+require('rust-tools').setup()
+EOF
+'''

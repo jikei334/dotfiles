@@ -1,0 +1,85 @@
+[[plugins]]
+repo = 'Shougo/ddu.vim'
+depends = 'denops.vim'
+hook_add = '''
+nmap <silent> <C-e>
+\   <Cmd>call ddu#start({
+\       'name': 'filer',
+\       'searchPath': expand('%:p'),
+\   })<CR>
+'''
+hook_source = '''
+echo "source ddu"
+call ddu#custom#patch_local('filer', {
+\   'ui': 'filer',
+\   'sources': [
+\       {
+\           'name': 'file',
+\           'params': {},
+\       },
+\   ],
+\   'sourceOptions': {
+\       '_': {
+\           'columns': ['filename'],
+\       },
+\   },
+\   'kindOptions': {
+\       'file': {
+\           'defaultAction': 'open',
+\       },
+\   },
+\   'uiParams': {
+\       'filer': {
+\           'winWidth': 40,
+\           'split': 'floating',
+\           'splitDirection': 'topleft',
+\       },
+\   },
+\})
+autocmd TabEnter,CursorHold,FocusGained <buffer>
+\   call ddu#ui#filer#do_action('checkItem')
+autocmd FileType ddu-filer call s:ddu_filer_settings()
+function! s:ddu_filer_settings() abort
+    nnoremap <buffer><silent> <Esc>
+\       <Cmd>call ddu#ui#filer#do_action('quit')<CR>
+    nnoremap <buffer><expr> <CR>
+\       ddu#ui#get_item()->get('isTree', v:false) ?
+\       "<Cmd>call ddu#ui#do_action('itemAction', {
+\           'name': 'narrow',
+\       })<CR>"
+\       : "<Cmd>call ddu#ui#do_action('itemAction', {
+\           'name': 'open'
+\       })<CR>"
+    nnoremap <buffer><silent> <BS>
+\       <Cmd>call ddu#ui#filer#do_action('itemAction', {
+\           'name': 'narrow',
+\           'params': {
+\               'path': '..',
+\           },
+\       })<CR>
+    nnoremap <buffer><silent> t
+\       <Cmd>call ddu#ui#filer#do_action('itemAction' {
+\           'name': 'newFile',
+\       })<CR>
+    nnoremap <buffer><silent> mk
+\       <Cmd>call ddu#ui#filer#do_action('itemAction' {
+\           'name': 'newDirectory',
+\       })<CR>
+endfunction
+'''
+
+[[plugins]]
+repo = 'Shougo/ddu-ui-filer'
+on_source = ['denops.vim', 'ddu.vim']
+
+[[plugins]]
+repo = 'Shougo/ddu-source-file'
+on_source = ['denops.vim', 'ddu.vim']
+
+[[plugins]]
+repo = 'Shougo/ddu-kind-file'
+on_source = ['denops.vim', 'ddu.vim']
+
+[[plugins]]
+repo = 'Shougo/ddu-column-filename'
+on_source = ['denops.vim', 'ddu.vim']

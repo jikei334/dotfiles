@@ -1,0 +1,44 @@
+snippet procon
+abbr use proconio::input;
+options head
+    use proconio::input;
+
+
+    fn main() {
+        input! {
+        }
+    }
+
+snippet procon_iter
+    use proconio::input;
+    use proconio::source::line::LineSource;
+    use std::io::{self, BufReader, stdin};
+
+
+    fn main() {
+        let mut source = LineSource::new(BufReader::new(stdin()));
+        input! {
+            from &mut source,
+        }
+    }
+
+
+snippet print_str
+    println!("{}", ${1}.iter().map(|&x| x.to_string()).collect::<Vec<_>>().join(" "));
+
+snippet coordinate_compression
+    let mut set = HashSet::new();
+    ${1}
+    let mut list = set.iter().map(|&xi| xi).collect::<Vec<_>>();
+    list.sort();
+    let mut map = HashMap::new();
+    for i in 0..list.len() {
+        map.insert(list[i], i);
+    }
+
+snippet build_graph
+    let mut ${1:graph} = vec![vec![]; ${2:n}];
+    for &(u, v) in &${3:edges} {
+        ${1:graph}[u].push(v);
+        ${1:graph}[v].push(u);
+    }
