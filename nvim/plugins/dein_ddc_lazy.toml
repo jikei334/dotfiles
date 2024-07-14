@@ -77,7 +77,7 @@ inoremap <silent> <C-k> <Plug>(deoppet_expand)
 hook_source = '''
 call deoppet#initialize()
 call deoppet#custom#option('snippets', [{
-\   'path': '/home/jikei/dotfiles/nvim/autoload/snippets',
+\   'path': getenv('XDG_CONFIG_HOME') .. 'nvim/autoload/snippets',
 \}])
 '''
 

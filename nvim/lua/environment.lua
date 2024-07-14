@@ -22,10 +22,17 @@ for k, v in pairs(options) do
     vim.opt[k] = v
 end
 
-vim.g.python3_host_prog = vim.fn.exepath('python3')
+-- python
+if vim.fn.has('wsl') == 1 then
+    vim.g.python3_host_prog = vim.fn.exepath('python3')
+elseif vim.fn.has('Windows') == 1 then
+    vim.g.python3_host_prog = vim.fn.exepath('python')
+else
+    vim.g.python3_host_prog = vim.fn.exepath('python3')
+end
 
 -- clip board
-if vim.fn.has('Windows') then
+if vim.fn.has('wsl') == 1 then
     local win32yank_path = os.getenv("HOME") .. "/.local/bin/win32yank.exe"
     if vim.fn.getftype(win32yank_path) == "" then
         local win32yank_url = 'https://github.com/equalsraf/win32yank/releases/download/v0.1.1/win32yank-x86.zip'
