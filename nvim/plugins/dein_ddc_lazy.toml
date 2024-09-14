@@ -11,7 +11,7 @@ hook_source = '''
 call ddc#custom#patch_global('ui', 'pum')
 call ddc#custom#patch_global('sources', [
 \   'nvim-lsp',
-\   'deoppet',
+\   'denippet',
 \   'around',
 \])
 call ddc#custom#patch_global('sourceOptions', #{
@@ -23,7 +23,7 @@ call ddc#custom#patch_global('sourceOptions', #{
 \       mark: 'lsp',
 \       forceCompletionPattern: '\.\w*|:\w*|->\w*',
 \   },
-\   deoppet: #{
+\   denippet: #{
 \       mark: 'dp',
 \       dup: v:true,
 \   },
@@ -69,19 +69,6 @@ repo = 'Shougo/ddc-source-nvim-lsp'
 on_source = 'ddc.vim'
 
 [[plugins]]
-repo = 'Shougo/deoppet.nvim'
-on_source = 'ddc.vim'
-hook_add = '''
-inoremap <silent> <C-k> <Plug>(deoppet_expand)
-'''
-hook_source = '''
-call deoppet#initialize()
-call deoppet#custom#option('snippets', [{
-\   'path': getenv('XDG_CONFIG_HOME') .. 'nvim/autoload/snippets',
-\}])
-'''
-
-[[plugins]]
 repo = 'neovim/nvim-lspconfig'
 depends = ['ddc.vim', 'ddc-source-nvim-lsp']
 on_event = ['InsertEnter']
@@ -112,8 +99,6 @@ nvim_lsp.pylsp.setup{
     },
 }
 
-nvim_lsp.clangd.setup{}
-
 local opts = {
     capabilities = capabilities,
     tools = {
@@ -127,4 +112,20 @@ local opts = {
 }
 require('rust-tools').setup()
 EOF
+'''
+
+[[plugins]]
+repo = 'uga-rosa/denippet.vim'
+on_source = ['ddc.vim', 'denops.vim']
+hook_source = '''
+let dir = stdpath('config') . '/snippet/'
+for file in glob(dir . '*.*', 1, 1)
+    call denippet#load(file)
+endfor
+
+inoremap <C-k> <Plug>(denippet-expand)
+inoremap <expr> <Tab> denippet#jumpable() ? '<Plug>(denippet-jump-next)' : '<Tab>'
+snoremap <expr> <Tab> denippet#jumpable() ? '<Plug>(denippet-jump-next)' : '<Tab>'
+inoremap <expr> <S-Tab> denippet#jumpable(-1) ? '<Plug>(denippet-jump-next-prev)' : '<Tab>'
+snoremap <expr> <S-Tab> denippet#jumpable(-1) ? '<Plug>(denippet-jump-next-prev)' : '<Tab>'
 '''
