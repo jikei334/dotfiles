@@ -10,7 +10,7 @@ inoremap <C-p> <Cmd>call pum#map#insert_relative(-1)<CR>
 hook_source = '''
 call ddc#custom#patch_global('ui', 'pum')
 call ddc#custom#patch_global('sources', [
-\   'nvim-lsp',
+\   'lsp',
 \   'denippet',
 \   'around',
 \])
@@ -19,7 +19,7 @@ call ddc#custom#patch_global('sourceOptions', #{
 \       matchers: ['matcher_head'],
 \       sorters: ['sorter_rank'],
 \   },
-\   nvim-lsp: #{
+\   lsp: #{
 \       mark: 'lsp',
 \       forceCompletionPattern: '\.\w*|:\w*|->\w*',
 \   },
@@ -35,7 +35,7 @@ call ddc#custom#patch_global('sourceParams', #{
 \   around: #{
 \       maxSize: 50,
 \   },
-\   nvim-lsp: #{
+\   lsp: #{
 \       snippetEngine: denops#callback#register({
 \           body -> vsnip#anonymous(body)
 \       }),
@@ -65,12 +65,12 @@ repo = 'Shougo/ddc-sorter_rank'
 on_source = 'ddc.vim'
 
 [[plugins]]
-repo = 'Shougo/ddc-source-nvim-lsp'
+repo = 'Shougo/ddc-source-lsp'
 on_source = 'ddc.vim'
 
 [[plugins]]
 repo = 'neovim/nvim-lspconfig'
-depends = ['ddc.vim', 'ddc-source-nvim-lsp']
+depends = ['ddc.vim', 'ddc-source-lsp']
 on_event = ['InsertEnter']
 hook_add = '''
 set omnifunc=lsp#omnifunc
@@ -82,7 +82,7 @@ nnoremap <silent> <leader>h <cmd>lua vim.lsp.buf.hover()<CR>
 hook_source = '''
 lua << EOF
 local nvim_lsp = require('lspconfig')
-local capabilities = require('ddc_nvim_lsp').make_client_capabilities()
+local capabilities = require('ddc_source_lsp').make_client_capabilities()
 nvim_lsp.pylsp.setup{
     capabilities = capabilities,
     settings = {
@@ -110,7 +110,7 @@ local opts = {
         standalone = true,
     },
 }
-require('rust-tools').setup()
+require('rust-tools').setup(opts)
 EOF
 '''
 
