@@ -9,14 +9,13 @@ nmap <silent> <C-e>
 \   })<CR>
 '''
 hook_source = '''
-echo "source ddu"
 call ddu#custom#patch_local('filer', {
 \   'ui': 'filer',
 \   'sources': [
 \       {
 \           'name': 'file',
 \           'params': {},
-\       },
+\       }
 \   ],
 \   'sourceOptions': {
 \       '_': {
@@ -83,3 +82,34 @@ on_source = ['denops.vim', 'ddu.vim']
 [[plugins]]
 repo = 'Shougo/ddu-column-filename'
 on_source = ['denops.vim', 'ddu.vim']
+
+[[plugins]]
+repo = 'Shougo/deol.nvim'
+on_source = ['ddu.vim']
+
+hook_add = '''
+nmap <leader>sh <Cmd>call deol#start({
+\   'split': "otherwise",
+\})<CR>
+tnoremap <C-[> <C-\><C-n>
+
+autocmd FileType deol call s:deol_settings()
+function! s:deol_settings() abort
+    nnoremap <buffer> <C-n> <Plug>(deol_next_prompt)
+    nnoremap <buffer> <C-p> <Plug>(deol_previous_prompt)
+    nnoremap <buffer> <CR> <Plug>(deol_execute_line)
+    nnoremap <buffer> A <Plug>(deol_start_append_last)
+    nnoremap <buffer> I <Plug>(deol_start_insert_first)
+    nnoremap <buffer> a <Plug>(deol_start_append)
+    nnoremap <buffer> i <Plug>(deol_start_insert)
+    nnoremap <buffer> e <Plug>(deol_edit)
+    nnoremap <buffer> q <Plug>(deol_quit)
+endfunction
+
+autocmd BufEnter deol-edit@default call s:deol_edit_settings()
+function! s:deol_edit_settings() abort
+    nnoremap <buffer> <CR> <Plug>(deol_execute_line)
+    nnoremap <buffer> q <Plug>(deol_quit)
+    inoremap <buffer> <CR> <Plug>(deol_execute_line)
+endfunction
+'''
