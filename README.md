@@ -1,9 +1,15 @@
 # dotfiles
+neovimとzshの設定ファイル
 
-## Zsh
-Dockerとの兼ね合い
+## Docker環境の使い方(Podman)
+dockerディレクトリに移動しておく
 
-いつかいい感じにしたい
+### ビルド
+```bash
+podman build -t devenv:ubuntu26 . 
+```
 
-## Docker
-テスト用
+### 実行
+```bash
+podman run --rm -it --userns=keep-id　-v ..:/home/ubuntu/.config -e ZDOTDIR=/home/ubuntu/.config/zsh devenv:ubuntu26
+```
