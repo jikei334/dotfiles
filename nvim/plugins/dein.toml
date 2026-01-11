@@ -14,64 +14,7 @@ repo = 'vim-airline/vim-airline-themes'
 repo = 'tpope/vim-commentary'
 
 [[plugins]]
-repo = 'ncm2/float-preview.nvim'
-hook_add = '''
-set completeopt-=preview
-let g:float_preview#docked = 1
-'''
+repo = 'vim-denops/denops.vim'
 
 [[plugins]]
-repo  = 'roxma/nvim-yarp'
-
-[[plugins]]
-repo = 'roxma/vim-hug-neovim-rpc'
-on_if = '!has("nvim")'
-
-[[plugins]]
-repo = 'neovim/nvim-lspconfig'
-hook_add = '''
-lua << EOF
-local nvim_lsp = require'lspconfig'
-nvim_lsp.pyls.setup{
-    settings = {
-        pyls = {
-            plugins = {
-                pycodestyle = {
-                    enabled = false
-                },
-                pylint = {
-                    enabled = false
-                }
-            }
-        },
-    },
-}
-nvim_lsp.clangd.setup{}
-EOF
-set omnifunc=lsp#omnifunc
-
-nnoremap <silent> <leader>d <cmd>lua vim.lsp.buf.definition()<CR>
-nnoremap <silent> <leader>e <cmd>lua vim.lsp.buf.declaration()<CR>
-nnoremap <silent> <leader>h <cmd>lua vim.lsp.buf.hover()<CR>
-'''
-
-[[plugins]]
-repo = 'Shougo/deoplete-lsp'
-depends = 'deoplete.nvim'
-
-[[plugins]]
-repo = 'cespare/vim-toml'
-
-[[plugions]]
-repo = 'Shougo/echodoc.vim'
-hook_add = '''
-let g:echodoc#enable_at_startup = 1
-let g:echodoc#type = 'floating'
-highlight link EchoDocFloat Pmenu
-'''
-
-[[plugins]]
-repo = 'tyru/open-browser.vim'
-
-[[plugins]]
-repo = 'previm/previm'
+repo = 'Shougo/pum.vim'

@@ -1,0 +1,34 @@
+[procon]
+prefix = "procon"
+if = "base"
+body = '''
+use proconio::input;${1}
+
+
+fn main() {
+    input! {
+        ${2}
+    }
+    ${0}
+}'''
+
+[procon_iter]
+prefix = "procon_iter"
+if = "base"
+body = '''
+use proconio::input;
+use proconio::source::line::LineSource;
+use std::io::{self, BufReader, stdin};
+
+
+fn main() {
+    let mut source = LineSource::new(BufReader::new(stdin()));
+    input! {
+        from &mut source,
+    }
+}'''
+
+[print_str]
+prefix = "print_str"
+body = '''
+println!("{}", ${1}.iter().map(|&x| x.to_string()).collect::<Vec<_>>().join(" "));'''

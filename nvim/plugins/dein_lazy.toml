@@ -4,125 +4,16 @@ on_cmd = 'Dein'
 
 [[plugins]]
 repo = 'jiangmiao/auto-pairs'
-on_event = 'InsertEnter'
-
-[[plugins]]
-repo = 'Shougo/defx.nvim'
-depends = "defx-icons"
-on_cmd = "Defx"
-hook_add = '''
-nnoremap <silent> <C-e>
-\ :<C-u>Defx -listed -resume -buffer-name=tab`tabpagenr()`<CR>
-'''
-hook_source = '''
-call defx#custom#column('icon', {
-    \ 'directory_icon': '▸',
-    \ 'opened_icon': '▾',
-    \ 'root_icon': ' ',
-\ })
-call defx#custom#column('mark', {
-    \ 'readonly_icon': '✗',
-    \ 'selected_icon': '✓',
-\ })
-call defx#custom#option('_', {
-\ 'columns': 'mark:indent:icons:indent:filename:type',
-\ 'split': 'floating',
-\ 'direction': 'topleft',
-\ 'winwidth': 80,
-\ 'show_ignored_files': 1,
-\ 'toggle': 1,
-\})
-'''
-[plugins.ftplugin]
-defx = '''
-nnoremap <silent><buffer><expr> <CR>
-\ defx#is_directory() ?
-\ defx#do_action('open_tree', "toggle") :
-\ defx#async_action('drop')
-nnoremap <silent><buffer><expr> o
-\ defx#async_action('open')
-nnoremap <silent><buffer><expr> t
-\ defx#async_action('open', 'tabnew')
-nnoremap <silent><buffer><expr> i
-\ defx#do_action('open', 'split')
-nnoremap <silent><buffer><expr> h
-\ defx#async_action('cd', ['..'])
-nnoremap <silent><buffer><expr> N
-\ defx#do_action('new_directory')
-nnoremap <silent><buffer><expr> n
-\ defx#do_action('new_file')
-nnoremap <silent><buffer><expr> m
-\ defx#do_action('move')
-nnoremap <silent><buffer><expr> d
-\ defx#do_action('remove')
-nnoremap <silent><buffer><expr> r
-\ defx#do_action('rename')
-nnoremap <silent><buffer><expr> l
-\ defx#do_action('toggle_columns', 'mark:filename:type:time')
-nnoremap <silent><buffer><expr> *
-\ defx#async_action('toggle_ignored_files')
-'''
-
-[[plugins]]
-repo = "ryanoasis/vim-devicons"
-hook_add = '''
-let g:webdevicons_enable_nerdtree = 1
-let g:webdevicons_enable_denite = 1
-'''
-
-[[plugins]]
-repo = "kristijanhusak/defx-icons"
-hook_add = '''
-let g:defx_icons_enable_syntax_highlight = 0
-let g:defx_icons_column_length = 4
-'''
+on_event = ['InsertEnter']
 
 [[plugins]]
 repo = 'Shougo/context_filetype.vim'
 
 [[plugins]]
-repo = 'Shougo/deoplete.nvim'
-depends = 'context_filetype.vim'
-on_event = 'InsertEnter'
-hook_add = '''
-let g:deoplete#enable_at_startup = 1
-'''
-
+repo = 'matsui54/denops-signature_help'
+on_source = ['denops.vim', 'nvim-lspconfig']
 hook_source = '''
-call deoplete#custom#option({
-\   'auto_complete_delay': 200,
-\   'auto_complete_start_length': 0,
-\   'smart_case': v:true,
-\   'max_list': 20,
-\})
-'''
+call signature_help#enable()
 
-[[plugins]]
-repo = 'Shougo/denite.nvim'
-on_cmd = 'Denite'
-hook_add = '''
-nmap <silent> <leader>f :<C-u>Denite -start-filter file/rec<CR>
-nmap <silent> <leader>F :<C-u>DeniteProjectDir -start-filter file/rec<CR>
-nmap <silent> <leader>g :<C-u>DeniteProjectDir grep:::<C-r><C-w><CR>
-nmap <silent> <leader>G :<C-u>DeniteProjectDir grep:::<C-r><C-a><CR>
-nmap <silent> <leader><leader>g :<C-u>Denite grep<CR>
-nmap <silent> <leader><leader>G :<C-u>DeniteProjectDir grep<CR>
-'''
-hook_source = '''
-call denite#custom#option('default', {
-\   'auto_action': 'preview',
-\   'floating_preview': v:true,
-\   'prompt': '%',
-\   'split': 'floating',
-\ })
-'''
-
-[plugins.ftplugin]
-denite = '''
-nnoremap <silent><buffer><expr> <CR>
-\ denite#do_map('do_action', 'split')
-nnoremap <silent><buffer><expr> q
-\ denite#do_map('quit')
-nnoremap <silent><buffer><expr> i
-\ denite#do_map('open_filter_buffer')
+let g:lsp_signature_help_enabled = 0
 '''
