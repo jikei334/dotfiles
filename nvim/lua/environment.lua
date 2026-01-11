@@ -31,28 +31,32 @@ else
     vim.g.python3_host_prog = vim.fn.exepath('python3')
 end
 
--- clip board
-if vim.fn.has('wsl') == 1 then
-    local win32yank_path = os.getenv("HOME") .. "/.local/bin/win32yank.exe"
-    if vim.fn.getftype(win32yank_path) == "" then
-        local win32yank_url = 'https://github.com/equalsraf/win32yank/releases/download/v0.1.1/win32yank-x86.zip'
-        local temp_dir = vim.fn.tempname()
-        vim.fn.mkdir(temp_dir)
-        vim.cmd("execute '!wget -P " .. temp_dir .. " " .. win32yank_url .. "'")
-        vim.cmd("execute '!unzip -d " .. temp_dir .. " " .. temp_dir .. "/win32yank-x86.zip'")
-        vim.cmd("execute '!cp " .. temp_dir .. "/win32yank.exe " .. win32yank_path .. "'")
-        vim.cmd("execute '!chmod +x " .. win32yank_path .. "'")
+-- terminal
+local shell = vim.env.SHELL
+if shell == nil then
+    if vim.fn.executable('zsh') == 1 then
+        vim.opt.shell = "zsh"
+        vim.opt.shellcmdflag = "-lc"
+    elseif vim.fn.executable('bash') == 1 then
+        vim.opt.shell = "bash"
+        vim.opt.shellcmdflag = "-lc"
     end
-    vim.g.clipboard = {
-        name = 'myClipboard',
-        copy = {
-            ["+"] = "win32yank.exe -i",
-            ["*"] = "win32yank.exe -i",
-        },
-        paste = {
-            ["+"] = "win32yank.exe -o",
-            ["*"] = "win32yank.exe -o",
-        },
-        cache_enabled = 1,
-    }
+else
+    if vim.fn.executable(shell) == 1 then
+        vim.opt.shell = shell
+        vim.opt.shellcmdflag = "-lc"
+    end
 end
+
+-- clip board
+vim.g.clipboard = {
+    name = 'OSC 52',
+    copy = {
+        ['+'] = require('vim.ui.clipboard.osc52').copy('+'),
+        ['*'] = require('vim.ui.clipboard.osc52').copy('*'),
+    },
+    paste = {
+        ['+'] = require('vim.ui.clipboard.osc52').paste('+'),
+        ['*'] = require('vim.ui.clipboard.osc52').paste('*'),
+    },
+}

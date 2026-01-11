@@ -10,6 +10,11 @@ ft_toml = toml_dir .. 'dein_ft.toml'
 
 path = vim.fn.expand(CACHE .. "/dein")
 
+bin_dir = vim.env.HOME .. '/.local/bin'
+if vim.fn.isdirectory(vim.fn.expand(bin_dir)) == 0 then
+    vim.fn.mkdir(vim.fn.expand(bin_dir))
+end
+
 -- install dein
 if vim.fn.isdirectory(vim.fn.expand(CACHE)) == 0 then
     vim.fn.mkdir(vim.fn.expand(CACHE))

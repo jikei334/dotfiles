@@ -18,6 +18,3 @@ repo = 'vim-denops/denops.vim'
 
 [[plugins]]
 repo = 'Shougo/pum.vim'
-
-[[plugins]]
-repo = 'simrat39/rust-tools.nvim'

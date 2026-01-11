@@ -16,10 +16,11 @@ call ddc#custom#patch_global('sources', [
 \])
 call ddc#custom#patch_global('sourceOptions', #{
 \   _: #{
-\       matchers: ['matcher_head'],
+\       matchers: ['matcher_head', 'matcher_fuzzy'],
 \       sorters: ['sorter_rank'],
 \   },
 \   lsp: #{
+\       isVolatile: v:true,
 \       mark: 'lsp',
 \       forceCompletionPattern: '\.\w*|:\w*|->\w*',
 \   },
@@ -41,11 +42,21 @@ call ddc#custom#patch_global('sourceParams', #{
 \       }),
 \       enableResolveItem: v:true,
 \       enableAdditionalTextEdit: v:true,
+\       triggerCharacters: ['.', ':'],
 \   },
 \})
+call ddc#custom#patch_global('autoCompleteEvents', [
+\   'InsertEnter',
+\   'TextChangedI',
+\   'TextChangedP',
+\])
 
 call ddc#enable()
 '''
+
+[[plugins]]
+repo = 'tani/ddc-fuzzy'
+on_source = 'ddc.vim'
 
 [[plugins]]
 repo = 'Shougo/ddc-source-around'
@@ -73,7 +84,7 @@ repo = 'neovim/nvim-lspconfig'
 depends = ['ddc.vim', 'ddc-source-lsp']
 on_event = ['InsertEnter']
 hook_add = '''
-set omnifunc=lsp#omnifunc
+set omnifunc=v:lua.vim.lsp.omnifunc
 
 nnoremap <silent> <leader>d <cmd>lua vim.lsp.buf.definition()<CR>
 nnoremap <silent> <leader>e <cmd>lua vim.lsp.buf.declaration()<CR>
@@ -81,9 +92,9 @@ nnoremap <silent> <leader>h <cmd>lua vim.lsp.buf.hover()<CR>
 '''
 hook_source = '''
 lua << EOF
-local nvim_lsp = require('lspconfig')
 local capabilities = require('ddc_source_lsp').make_client_capabilities()
-nvim_lsp.pylsp.setup{
+
+vim.lsp.config('pylsp', {
     capabilities = capabilities,
     settings = {
         pylsp = {
@@ -97,20 +108,46 @@ nvim_lsp.pylsp.setup{
             }
         },
     },
-}
+})
+vim.lsp.enable('pylsp')
 
-local opts = {
+vim.lsp.config('rust_analyzer', {
     capabilities = capabilities,
-    tools = {
-        inlay_hints = {
-            auto = true,
+    settings = {
+        ['rust-analyzer'] = {
+            cargo = {
+                allFeatures = true,
+            },
+            checkOnSave = true,
+            inlayHints = {
+                bindingModeHints = {
+                    enable = true,
+                },
+                genericParameterHints = {
+                    type = {
+                        enable = true,
+                    },
+                },
+            },
         },
     },
-    server = {
-        standalone = true,
-    },
-}
-require('rust-tools').setup(opts)
+})
+vim.lsp.enable('rust_analyzer')
+
+vim.lsp.inlay_hint.enable(true)
+
+vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, {
+    border = "none",
+})
+EOF
+'''
+
+[[plugins]]
+repo = 'uga-rosa/ddc-source-lsp-setup'
+on_source = ['ddc.vim']
+hook_source = '''
+lua << EOF
+require('ddc_source_lsp_setup').setup()
 EOF
 '''
 
