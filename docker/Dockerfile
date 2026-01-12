@@ -11,6 +11,7 @@ RUN apt update && apt -y upgrade && \
         build-essential \
         ca-certificates \
         curl \
+        dotnet-sdk-10.0 \
         git \
         libssl-dev \
         pkg-config \
@@ -24,6 +25,7 @@ RUN apt update && \
     apt install -y \
         neovim \
         python3-dev \
+        python3-pylsp \
         python3-pip && \
     rm -rf /var/lib/apt/lists*
 
@@ -51,7 +53,7 @@ USER ${USERNAME}
 
 ENV RUSTUP_HOME=/home/${USERNAME}/.rustup \
     CARGO_HOME=/home/${USERNAME}/.cargo \
-    PATH=/home/${USERNAME}/.cargo/bin:$PATH
+    PATH=/home/${USERNAME}/.cargo/bin:/home/${USERNAME}/.dotnet/tools:$PATH
 
 RUN curl https://sh.rustup.rs -sSf | sh -s -- -y --no-modify-path \
     && rustup component add \
@@ -63,6 +65,8 @@ RUN curl https://sh.rustup.rs -sSf | sh -s -- -y --no-modify-path \
         cargo-compete \
     && rustup toolchain install \
         1.42.0-x86_64-unknown-linux-gnu
+
+RUN dotnet tool install --global csharp-ls
 
 WORKDIR /workspace
 
