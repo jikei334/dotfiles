@@ -1,6 +1,18 @@
 # dotfiles
 neovimとzshの設定ファイル
 
+Copilotは競プロで邪魔なのでデフォルトでは無効
+
+有効にするにはNeovim内で以下を実行
+```vim
+:Copilot enable
+```
+
+## 対応言語
+- Rust
+- C#
+- Python
+
 ## Docker環境の使い方(Podman)
 dockerディレクトリに移動しておく
 
