@@ -23,5 +23,5 @@ podman build -t devenv:ubuntu26 .
 
 ### 実行
 ```bash
-podman run --rm -it --userns=keep-id　-v ..:/home/ubuntu/.config -e ZDOTDIR=/home/ubuntu/.config/zsh devenv:ubuntu26
+podman run --rm -it --userns=keep-id　-v ..:/home/ubuntu/.config -p 7777:7777 -e ZDOTDIR=/home/ubuntu/.config/zsh devenv:ubuntu26
 ```
