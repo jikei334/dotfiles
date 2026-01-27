@@ -17,3 +17,13 @@ call signature_help#enable()
 
 let g:lsp_signature_help_enabled = 0
 '''
+
+[[plugins]]
+repo = 'iamcco/markdown-preview.nvim'
+on_ft = ['markdown', 'pandoc.markdown', 'rmd']
+build = 'sh -c "cd app && npx --yes yarn install"'
+hook_source = '''
+let g:mkdp_port = 7777
+let g:mkdp_echo_preview_url = 1
+let g:mkdp_open_to_the_world = 1
+'''
