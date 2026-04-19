@@ -15,6 +15,7 @@ RUN apt update && apt -y upgrade && \
         git \
         libssl-dev \
         pkg-config \
+        sudo \
         unzip \
         wget \
         zsh && \
@@ -26,14 +27,17 @@ RUN apt update && \
         neovim \
         python3-dev \
         python3-pylsp \
-        python3-pip && \
-    rm -rf /var/lib/apt/lists*
+        python3-pip \
+        python3-venv \
+    && rm -rf /var/lib/apt/lists*
 
 RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
     && apt-get install -y nodejs \
     && npm install -g\
         npm \
         neovim \
+        typescript \
+        typescript-language-server \
     && rm -rf /var/lib/apt/lists/*
 RUN node --version && npm --version
 
@@ -55,6 +59,9 @@ ENV RUSTUP_HOME=/home/${USERNAME}/.rustup \
     CARGO_HOME=/home/${USERNAME}/.cargo \
     PATH=/home/${USERNAME}/.cargo/bin:/home/${USERNAME}/.dotnet/tools:$PATH
 
+ENV RUST_VERSION=1.89.0 \
+    RUST_CHANNEL=1.89.0
+
 RUN curl https://sh.rustup.rs -sSf | sh -s -- -y --no-modify-path \
     && rustup component add \
         rustfmt \
@@ -64,7 +71,9 @@ RUN curl https://sh.rustup.rs -sSf | sh -s -- -y --no-modify-path \
     && cargo install \
         cargo-compete \
     && rustup toolchain install \
-        1.42.0-x86_64-unknown-linux-gnu
+        1.42.0-x86_64-unknown-linux-gnu \
+    && rustup toolchain install \
+        ${RUST_CHANNEL}-x86_64-unknown-linux-gnu
 
 RUN dotnet tool install --global csharp-ls
 
