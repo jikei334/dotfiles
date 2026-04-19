@@ -150,6 +150,13 @@ vim.lsp.config('csharp_ls', {
 })
 vim.lsp.enable('csharp_ls')
 
+vim.lsp.config('ts_ls', {
+    capabilities = capabilities,
+    settings = {
+    },
+})
+vim.lsp.enable('ts_ls')
+
 vim.lsp.inlay_hint.enable(true)
 
 vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, {
