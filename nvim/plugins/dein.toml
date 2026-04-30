@@ -18,3 +18,16 @@ repo = 'vim-denops/denops.vim'
 
 [[plugins]]
 repo = 'Shougo/pum.vim'
+
+[[plugins]]
+repo = "nvim-lua/plenary.nvim"
+
+[[plugins]]
+repo = "nvim-telescope/telescope.nvim"
+depends = ['plenary.nvim']
+hook_add = '''
+nnoremap <silent> <leader>ff :Telescope find_files<CR>
+nnoremap <silent> <leader>fg :Telescope live_grep<CR>
+nnoremap <silent> <leader>fb :Telescope buffers<CR>
+nnoremap <silent> <leader>fh :Telescope help_tags<CR>
+'''
